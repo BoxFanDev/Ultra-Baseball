@@ -9,9 +9,10 @@ public class GameController : MonoBehaviour
     public static GameController instance;
 
     public GameObject hudcontainer;
-    public Text timerText;
+    public Text timerText, countDownText;
     public bool gamePlaying;
 
+    public int countDownTime;
     private float startTime, elapsedTime;
     TimeSpan timePlaying;
 
@@ -25,6 +26,7 @@ public class GameController : MonoBehaviour
     {
         gamePlaying = false;
 
+        //StartCoroutine(CountdownToStart());
         BeginGame();
     }
 
@@ -47,5 +49,23 @@ public class GameController : MonoBehaviour
             string timePlayingStr = timePlaying.ToString("mm':'ss'.'ff");
             timerText.text = timePlayingStr;
         }
+    }
+
+    IEnumerator CountdownToStart()
+    {
+        while (countDownTime > 0)
+        {
+            countDownText.text = countDownTime.ToString();
+            yield return new WaitForSeconds(1f);
+            countDownTime--;
+
+        }
+
+        BeginGame();
+        countDownText.text = "PLAY BALL!";
+
+        yield return new WaitForSeconds(0.5f);
+
+        countDownText.gameObject.SetActive(false);
     }
 }
