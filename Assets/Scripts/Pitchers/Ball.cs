@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Ball : MonoBehaviour
 {
+    public AudioClip[] homeruns;
+
     public float moveSpeed = 10f;
 
     Rigidbody2D rb;
@@ -31,8 +33,10 @@ public class Ball : MonoBehaviour
     {
         if (col.gameObject.name.Equals("Batter"))
         {
-            Debug.Log("OUT!");
+            
+            Debug.Log("STRIKE!");
             Destroy(gameObject);
+            target.GetComponent<HealthSystem>().TakeDamage(1);
         }
 
         if (col.gameObject.name.Equals("Square"))
@@ -55,5 +59,6 @@ public class Ball : MonoBehaviour
         moveDir = -moveDir;
         rb.AddForce(moveDir * force);
         FindObjectOfType<HitStop>().Stop(0.03f);
+        AudioManager.instance.RandomSFX(homeruns);
     }
 }

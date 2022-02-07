@@ -14,14 +14,17 @@ public class Pitcher : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        fireRate = 1f;
-        nextFire = Time.time;
+            fireRate = 1f;
+            nextFire = Time.time;        
     }
 
     // Update is called once per frame
     void Update()
     {
-        CheckIfTimeToFire();
+        if (GameController.instance.gamePlaying)
+        {
+            CheckIfTimeToFire();
+        }
     }
 
     void CheckIfTimeToFire()

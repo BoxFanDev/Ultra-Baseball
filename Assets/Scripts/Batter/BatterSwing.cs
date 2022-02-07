@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BatterSwing : MonoBehaviour
 {
+
     private float timeAttack;
     public float startTimeAttack;
 
@@ -13,7 +14,9 @@ public class BatterSwing : MonoBehaviour
     public LayerMask balls;
 
     public Animator anim;
-    public bool swing;
+    public bool swinging;
+
+    public AudioClip[] swingSounds;
 
     void Awake()
     {
@@ -23,19 +26,17 @@ public class BatterSwing : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (timeAttack <= 0)
+        if (GameController.instance.gamePlaying)
         {
-            if (Input.GetButtonDown("Fire1"))
+            if (Input.GetButtonDown("Fire1") && timeAttack <= 0)
             {
-                Collider2D[] ballToHit = Physics2D.OverlapBoxAll(attackPos.position, new Vector2(attackRangeX, attackRangeY), balls);
-                for (int i = 0; i < ballToHit.Length; i++)
-                {
-                    ballToHit[i].GetComponent<Ball>().Fly();
-                    anim.SetBool("swing", true);
-                    Invoke("SetBoolBack", .1f);
-                }
+                Swing();
+
+                AudioManager.instance.RandomSFX(swingSounds);
 
                 timeAttack = startTimeAttack;
+                anim.SetBool("swinging", true);
+                Invoke("SetBoolBack", .1f);
             }
             else
             {
@@ -50,8 +51,21 @@ public class BatterSwing : MonoBehaviour
         Gizmos.DrawWireCube(Vector3.zero, new Vector2(attackRangeX, attackRangeY));
     }
 
+    void Swing()
+    {
+
+        Collider2D[] ballToHit = Physics2D.OverlapBoxAll(attackPos.position, new Vector2(attackRangeX, attackRangeY), balls);
+        for (int i = 0; i < ballToHit.Length; i++)
+        {
+            ballToHit[i].GetComponent<Ball>().Fly();
+            
+        }
+
+    }
+
     void SetBoolBack()
     {
-        anim.SetBool("swing", false);
+        anim.SetBool("swinging", false);
     }
+
 }

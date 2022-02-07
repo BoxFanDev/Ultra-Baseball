@@ -134,5 +134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e42e027a444bb7a4db4d896159ab9508, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  homeruns:
+  - {fileID: 8300000, guid: 151340479075f2d4ea69f2d53f10b279, type: 3}
   moveSpeed: 20
   breakPrefab: {fileID: 5689938958147232119, guid: b566a00a6df9b0c48aa7dd8b6750ba96, type: 3}

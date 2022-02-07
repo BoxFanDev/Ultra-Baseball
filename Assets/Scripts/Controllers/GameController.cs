@@ -3,14 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
     public static GameController instance;
 
-    public GameObject hudcontainer;
+    public GameObject hudcontainer, gameOverPanel;
     public Text timerText, countDownText;
-    public bool gamePlaying;
+    public bool gamePlaying { get; private set; }
 
     public int countDownTime;
     private float startTime, elapsedTime;
@@ -24,10 +25,9 @@ public class GameController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        timerText.text = "00:00.00";
         gamePlaying = false;
-
-        //StartCoroutine(CountdownToStart());
-        BeginGame();
+        StartCoroutine(CountdownToStart());
     }
 
     private void BeginGame()
@@ -43,6 +43,7 @@ public class GameController : MonoBehaviour
     {
         if(gamePlaying)
         {
+
             elapsedTime = Time.time - startTime;
             timePlaying = TimeSpan.FromSeconds(elapsedTime);
 
@@ -55,6 +56,7 @@ public class GameController : MonoBehaviour
     {
         while (countDownTime > 0)
         {
+            
             countDownText.text = countDownTime.ToString();
             yield return new WaitForSeconds(1f);
             countDownTime--;
@@ -68,4 +70,14 @@ public class GameController : MonoBehaviour
 
         countDownText.gameObject.SetActive(false);
     }
+
+    public void EndGame()
+    {
+        gamePlaying = false;
+        gameOverPanel.SetActive(true);
+        string timePlayingStr = timePlaying.ToString("mm':'ss'.'ff");
+        gameOverPanel.transform.Find("EndTime").GetComponent<Text>().text = timePlayingStr;
+
+    }
+
 }

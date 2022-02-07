@@ -10,6 +10,7 @@ public class Batter : MonoBehaviour
 
     private float dirX;
 
+    //movement variables
     public float moveSpeed = 5f;
     public float jumpVelocity = 14f;
     public float fallMultiplier = 2.5f;
@@ -32,16 +33,34 @@ public class Batter : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (GameController.instance.gamePlaying)
+        {
+            GetPlayerInput();
+        }
+        else
+        {
+            rb.velocity = Vector2.zero;
+        }
+        //if (Input.inputString != "") Debug.Log(Input.inputString);
+
+        UpdateAnimationState();
+
+    }
+
+    private void GetPlayerInput()
+    {
+        //horizontal movement
         dirX = Input.GetAxis("Horizontal");
         rb.velocity = new Vector2(dirX * moveSpeed, rb.velocity.y);
 
+        //jumping
         if (Input.GetButtonDown("Jump"))
         {
             rb.velocity = Vector2.up * jumpVelocity;
 
         }
 
-
+        //jumping physics
         if (rb.velocity.y < 0)
         {
             rb.velocity += Vector2.up * Physics2D.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
@@ -52,14 +71,11 @@ public class Batter : MonoBehaviour
             rb.velocity += Vector2.up * Physics2D.gravity.y * (lowJumpMultiplier - 1) * Time.deltaTime;
         }
 
+        //fastfall
         if (rb.velocity.y <= 0 && Input.GetButtonDown("Fire3"))
         {
             rb.velocity += Vector2.up * Physics2D.gravity.y * (fastFallMultiplier - 1) * Time.deltaTime;
         }
-
-        if (Input.inputString != "") Debug.Log(Input.inputString);
-
-        UpdateAnimationState();
 
     }
 
